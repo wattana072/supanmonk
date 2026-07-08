@@ -378,10 +378,13 @@ async function onScanSuccess(decodedText, decodedResult) {
     if (isProcessingScan) return;
     isProcessingScan = true;
     
-    const monk = monksData.find(m => m.ID.toString() === decodedText.toString());
+    // ตัด https:// หรือ http:// ออกในกรณีที่ตัวแสกนหรือตัวสร้าง QR Code เผลอเติมเข้ามาให้
+    let cleanId = decodedText.replace(/^https?:\/\//i, '');
+    
+    const monk = monksData.find(m => m.ID.toString() === cleanId.toString());
     
     if (!monk) {
-        scanResultMsg.textContent = `ไม่พบข้อมูล: ${decodedText}`;
+        scanResultMsg.textContent = `ไม่พบข้อมูล: ${cleanId}`;
         scanResultMsg.className = 'scan-result-msg scan-error';
         speakText('ไม่พบข้อมูล');
         setTimeout(() => { isProcessingScan = false; }, 2500);
