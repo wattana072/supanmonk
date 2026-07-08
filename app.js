@@ -2,7 +2,7 @@
 const CONFIG = {
     // ใส่ URL ของ Web App ที่ได้จากการ Deploy Code.gs ตรงนี้
     // เช่น 'https://script.google.com/macros/s/.../exec'
-    GAS_URL: 'https://script.google.com/macros/s/AKfycbz7nFguQ-W7n9Zy360-rFLa5rEC26Cu6nyLNvoTcB7vnQHrjaczCJtBtKUgrTQ3T9KX/exec'
+    GAS_URL: 'https://script.google.com/macros/s/AKfycbxfoyFFeK5NoEH_Zpab_Ii1B7jFjViQadkucLPCFuytNyADAeuo64m4Y063pWCrVAw/exec'
 };
 
 // State
