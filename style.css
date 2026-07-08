@@ -131,22 +131,34 @@ h1 {
     overflow: hidden;
 }
 
-.filter-bar select {
+.filter-bar select, .filter-bar input {
     flex: 1;
+    width: 25%;
     padding: 14px 20px;
     border: none;
     background: transparent;
     font-size: 16px;
     font-family: inherit;
     color: var(--accent-color);
-    cursor: pointer;
     text-align: center;
-    appearance: none;
     outline: none;
     border-right: 1px solid var(--accent-color);
 }
 
-.filter-bar select:last-child {
+.filter-bar select {
+    cursor: pointer;
+    appearance: none;
+}
+
+.filter-bar input {
+    color: var(--text-primary);
+}
+
+.filter-bar input::placeholder {
+    color: var(--text-secondary);
+}
+
+.filter-bar select:last-child, .filter-bar input:last-child {
     border-right: none;
 }
 

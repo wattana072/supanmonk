@@ -17,6 +17,7 @@ const printListEl = document.getElementById('print-list');
 const filterGroupEl = document.getElementById('filter-group');
 const filterBedroomEl = document.getElementById('filter-bedroom');
 const filterAmphurEl = document.getElementById('filter-amphur');
+const filterNameEl = document.getElementById('filter-name');
 const searchAmphurEl = document.getElementById('search-amphur');
 const selectAllEl = document.getElementById('select-all');
 const selectedCountEl = document.getElementById('selected-count');
@@ -79,12 +80,15 @@ function setupEventListeners() {
         const groupVal = filterGroupEl.value;
         const bedroomVal = filterBedroomEl.value;
         const amphurVal = filterAmphurEl.value;
+        const nameVal = filterNameEl.value.toLowerCase();
         
         const filtered = monksData.filter(m => {
             const matchGroup = !groupVal || m.Group === groupVal;
             const matchBedroom = !bedroomVal || (m.Bedroom && m.Bedroom.includes(bedroomVal));
             const matchAmphur = !amphurVal || m.Amphur === amphurVal;
-            return matchGroup && matchBedroom && matchAmphur;
+            const matchName = !nameVal || (m.Monk && m.Monk.toLowerCase().includes(nameVal));
+            
+            return matchGroup && matchBedroom && matchAmphur && matchName;
         });
         renderMonkList(filtered);
     };
@@ -92,6 +96,7 @@ function setupEventListeners() {
     filterGroupEl.addEventListener('change', applyFilters);
     filterBedroomEl.addEventListener('change', applyFilters);
     filterAmphurEl.addEventListener('change', applyFilters);
+    filterNameEl.addEventListener('input', applyFilters);
 
     // Search Amphur
     searchAmphurEl.addEventListener('input', (e) => {
