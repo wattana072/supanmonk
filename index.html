@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ปฏิบัติธรรมพระสังฆาธิการ สุพรรณบุรี</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@300;400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="app-container">
+        <header>
+            <h1>ปฏิบัติธรรมพระสังฆาธิการ สุพรรณบุรี</h1>
+            <nav class="tabs">
+                <button class="tab-btn active" data-tab="monk-data">ข้อมูลพระ</button>
+                <button class="tab-btn" data-tab="print-cards">พิมพ์บัตร</button>
+            </nav>
+        </header>
+
+        <main>
+            <!-- Tab: ข้อมูลพระ -->
+            <section id="monk-data" class="tab-content active">
+                <div class="search-bar">
+                    <input type="text" id="search-monk" placeholder="ค้นหา วัด, ชื่อพระ, กลุ่ม, ที่จำวัด...">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                </div>
+                
+                <div class="list-container" id="monk-list">
+                    <div class="loading">กำลังโหลดข้อมูล...</div>
+                </div>
+            </section>
+
+            <!-- Tab: พิมพ์บัตร -->
+            <section id="print-cards" class="tab-content">
+                <div class="search-bar">
+                    <input type="text" id="search-amphur" placeholder="ค้นหาตามอำเภอ...">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                </div>
+
+                <div class="table-container">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>
+                                    <label class="checkbox-container">
+                                        <input type="checkbox" id="select-all">
+                                        <span class="checkmark"></span>
+                                    </label>
+                                </th>
+                                <th>อำเภอ</th>
+                                <th>วัด</th>
+                                <th>ชื่อพระ</th>
+                            </tr>
+                        </thead>
+                        <tbody id="print-list">
+                            <!-- Rows rendered here -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="action-bar">
+                    <span id="selected-count">เลือก 0 รายการ</span>
+                    <button id="btn-generate-slides" class="btn-primary" disabled>สร้างและพิมพ์บัตร</button>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Edit Modal -->
+    <div id="edit-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>รายละเอียดและแก้ไขข้อมูล</h2>
+                <button class="close-btn">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="edit-form">
+                    <input type="hidden" id="edit-id" name="ID">
+                    <div class="form-group">
+                        <label>อำเภอ</label>
+                        <input type="text" id="edit-amphur" name="Amphur">
+                    </div>
+                    <div class="form-group">
+                        <label>วัด</label>
+                        <input type="text" id="edit-temple" name="Temple">
+                    </div>
+                    <div class="form-group">
+                        <label>ชื่อพระ</label>
+                        <input type="text" id="edit-monk" name="Monk">
+                    </div>
+                    <div class="form-group">
+                        <label>ตำแหน่ง</label>
+                        <input type="text" id="edit-position" name="Position">
+                    </div>
+                    <div class="form-group">
+                        <label>เบอร์โทรศัพท์</label>
+                        <input type="text" id="edit-phone" name="Phone">
+                    </div>
+                    <div class="form-group">
+                        <label>พรรษา</label>
+                        <input type="text" id="edit-monkyear" name="MonkYear">
+                    </div>
+                    <div class="form-group">
+                        <label>กลุ่ม</label>
+                        <input type="text" id="edit-group" name="Group">
+                    </div>
+                    <div class="form-group">
+                        <label>ที่จำวัด</label>
+                        <input type="text" id="edit-bedroom" name="Bedroom">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="btn-cancel" class="btn-secondary">ยกเลิก</button>
+                <button type="submit" id="btn-save" class="btn-primary">บันทึก</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div id="loading-overlay" class="loading-overlay hidden">
+        <div class="spinner"></div>
+        <p id="loading-text">กำลังประมวลผล...</p>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
