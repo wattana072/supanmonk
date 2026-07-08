@@ -31,6 +31,12 @@ const btnCloseModal = document.querySelector('.close-btn');
 const btnCancelModal = document.getElementById('btn-cancel');
 const editForm = document.getElementById('edit-form');
 
+// Scanner Elements
+const btnScanRegister = document.getElementById('btn-scan-register');
+const scannerModal = document.getElementById('scanner-modal');
+const closeScannerBtn = document.getElementById('close-scanner-btn');
+const scanResultMsg = document.getElementById('scan-result-msg');
+
 // Initialize
 async function init() {
     if (!CONFIG.GAS_URL) {
@@ -119,6 +125,10 @@ function setupEventListeners() {
 
     // Generate Slides
     btnGenerateEl.addEventListener('click', generateSlides);
+
+    // Scanner Modal
+    btnScanRegister.addEventListener('click', openScanner);
+    closeScannerBtn.addEventListener('click', closeScanner);
 
     // Modal
     btnCloseModal.addEventListener('click', closeModal);
@@ -329,6 +339,107 @@ function populateFilters(data) {
         filterBedroomEl.innerHTML += `<option value="${val}">${val}</option>`;
     });
     filterBedroomEl.value = currentBedroomVal;
+}
+
+// Scanner Logic
+let html5QrcodeScanner = null;
+let isProcessingScan = false;
+
+function openScanner() {
+    scannerModal.classList.add('show');
+    scanResultMsg.textContent = 'พร้อมแสกน...';
+    scanResultMsg.className = 'scan-result-msg';
+    
+    if (!html5QrcodeScanner) {
+        html5QrcodeScanner = new Html5QrcodeScanner(
+            "reader",
+            { fps: 10, qrbox: {width: 250, height: 250} },
+            /* verbose= */ false
+        );
+        html5QrcodeScanner.render(onScanSuccess, onScanFailure);
+    }
+}
+
+function closeScanner() {
+    scannerModal.classList.remove('show');
+    if (html5QrcodeScanner) {
+        html5QrcodeScanner.clear().catch(error => {
+            console.error("Failed to clear scanner. ", error);
+        });
+        html5QrcodeScanner = null;
+    }
+}
+
+function onScanFailure(error) {
+    // Ignore routine scan failures
+}
+
+async function onScanSuccess(decodedText, decodedResult) {
+    if (isProcessingScan) return;
+    isProcessingScan = true;
+    
+    const monk = monksData.find(m => m.ID.toString() === decodedText.toString());
+    
+    if (!monk) {
+        scanResultMsg.textContent = `ไม่พบข้อมูล: ${decodedText}`;
+        scanResultMsg.className = 'scan-result-msg scan-error';
+        speakText('ไม่พบข้อมูล');
+        setTimeout(() => { isProcessingScan = false; }, 2500);
+        return;
+    }
+    
+    if (monk.Registed == 1) {
+        scanResultMsg.textContent = `ลงทะเบียนแล้ว: ${monk.Monk}`;
+        scanResultMsg.className = 'scan-result-msg';
+        speakText('ลงทะเบียนแล้ว');
+        setTimeout(() => { isProcessingScan = false; }, 2500);
+        return;
+    }
+    
+    scanResultMsg.textContent = `กำลังลงทะเบียน: ${monk.Monk}`;
+    scanResultMsg.className = 'scan-result-msg';
+    
+    try {
+        const payload = { ID: decodedText, Registed: 1 };
+        const response = await fetch(`${CONFIG.GAS_URL}?action=update`, {
+            method: 'POST',
+            body: JSON.stringify(payload),
+            headers: {
+                'Content-Type': 'text/plain;charset=utf-8'
+            }
+        });
+        
+        const result = await response.json();
+        
+        if (result.status === 'success') {
+            scanResultMsg.textContent = `ลงทะเบียนสำเร็จ: ${monk.Monk}`;
+            scanResultMsg.className = 'scan-result-msg scan-success';
+            speakText('ลงทะเบียนสำเร็จ');
+            monk.Registed = 1;
+        } else {
+            scanResultMsg.textContent = `ข้อผิดพลาด: ${result.message}`;
+            scanResultMsg.className = 'scan-result-msg scan-error';
+            speakText('เกิดข้อผิดพลาด');
+        }
+    } catch (error) {
+        scanResultMsg.textContent = 'การเชื่อมต่อล้มเหลว';
+        scanResultMsg.className = 'scan-result-msg scan-error';
+        speakText('การเชื่อมต่อล้มเหลว');
+    }
+    
+    setTimeout(() => { isProcessingScan = false; }, 3000);
+}
+
+function speakText(text) {
+    if ('speechSynthesis' in window) {
+        // Stop any currently playing speech to avoid queueing delays
+        window.speechSynthesis.cancel();
+        
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.lang = 'th-TH';
+        utterance.rate = 1.2; // Speak slightly faster
+        window.speechSynthesis.speak(utterance);
+    }
 }
 
 // Start

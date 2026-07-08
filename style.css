@@ -470,3 +470,56 @@ h1 {
     padding: 40px;
     color: var(--text-secondary);
 }
+
+/* Scan Feature */
+.scan-action-container {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 2rem;
+}
+
+.btn-scan {
+    background: #ffcc00;
+    color: #1d1d1f;
+    border: none;
+    padding: 16px 40px;
+    border-radius: 30px;
+    font-size: 20px;
+    font-weight: 600;
+    font-family: inherit;
+    cursor: pointer;
+    box-shadow: var(--shadow-md);
+    transition: all 0.2s;
+}
+
+.btn-scan:hover {
+    background: #e6b800;
+    transform: scale(1.02);
+}
+
+.scan-result-msg {
+    margin-top: 16px;
+    text-align: center;
+    font-weight: 500;
+    font-size: 18px;
+    min-height: 27px;
+}
+
+.scan-success {
+    color: #34c759;
+}
+
+.scan-error {
+    color: var(--danger-color);
+}
+
+.scanner-content {
+    max-width: 600px;
+}
+
+.scanner-body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 10px;
+}

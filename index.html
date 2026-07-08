@@ -41,6 +41,10 @@
 
             <!-- Tab: พิมพ์บัตร -->
             <section id="print-cards" class="tab-content">
+                <div class="scan-action-container">
+                    <button id="btn-scan-register" class="btn-scan">Scan ลงทะเบียน</button>
+                </div>
+                
                 <div class="search-bar">
                     <input type="text" id="search-amphur" placeholder="ค้นหาตามอำเภอ...">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
@@ -132,6 +136,21 @@
         <p id="loading-text">กำลังประมวลผล...</p>
     </div>
 
+    <!-- Scanner Modal -->
+    <div id="scanner-modal" class="modal">
+        <div class="modal-content scanner-content">
+            <div class="modal-header">
+                <h2>Scan ลงทะเบียน</h2>
+                <button class="close-btn" id="close-scanner-btn">&times;</button>
+            </div>
+            <div class="modal-body scanner-body">
+                <div id="reader" style="width: 100%;"></div>
+                <div id="scan-result-msg" class="scan-result-msg"></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
     <script src="app.js"></script>
 </body>
 </html>
