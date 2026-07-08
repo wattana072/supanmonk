@@ -21,9 +21,16 @@
         <main>
             <!-- Tab: ข้อมูลพระ -->
             <section id="monk-data" class="tab-content active">
-                <div class="search-bar">
-                    <input type="text" id="search-monk" placeholder="ค้นหา กลุ่ม, ที่พัก, ชื่อ...">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                <div class="filter-bar">
+                    <select id="filter-group">
+                        <option value="">กลุ่ม(ทั้งหมด)</option>
+                    </select>
+                    <select id="filter-bedroom">
+                        <option value="">ที่พัก(ทั้งหมด)</option>
+                    </select>
+                    <select id="filter-amphur">
+                        <option value="">อำเภอ(ทั้งหมด)</option>
+                    </select>
                 </div>
                 
                 <div class="list-container" id="monk-list">

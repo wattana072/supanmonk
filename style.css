@@ -120,6 +120,44 @@ h1 {
     color: var(--text-secondary);
 }
 
+/* Filter Bar */
+.filter-bar {
+    display: flex;
+    margin-bottom: 1.5rem;
+    background: var(--card-bg);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--accent-color);
+    overflow: hidden;
+}
+
+.filter-bar select {
+    flex: 1;
+    padding: 14px 20px;
+    border: none;
+    background: transparent;
+    font-size: 16px;
+    font-family: inherit;
+    color: var(--accent-color);
+    cursor: pointer;
+    text-align: center;
+    appearance: none;
+    outline: none;
+    border-right: 1px solid var(--accent-color);
+}
+
+.filter-bar select:last-child {
+    border-right: none;
+}
+
+.filter-bar select:hover {
+    background-color: #f9f9fb;
+}
+
+.filter-bar select:focus {
+    background-color: #f0f7ff;
+}
+
 /* List View */
 .list-container {
     display: flex;

@@ -14,7 +14,9 @@ const tabs = document.querySelectorAll('.tab-btn');
 const tabContents = document.querySelectorAll('.tab-content');
 const monkListEl = document.getElementById('monk-list');
 const printListEl = document.getElementById('print-list');
-const searchMonkEl = document.getElementById('search-monk');
+const filterGroupEl = document.getElementById('filter-group');
+const filterBedroomEl = document.getElementById('filter-bedroom');
+const filterAmphurEl = document.getElementById('filter-amphur');
 const searchAmphurEl = document.getElementById('search-amphur');
 const selectAllEl = document.getElementById('select-all');
 const selectedCountEl = document.getElementById('selected-count');
@@ -46,6 +48,7 @@ async function fetchData() {
         
         if (result.status === 'success') {
             monksData = result.data;
+            populateFilters(monksData);
             renderMonkList(monksData);
             renderPrintList(monksData);
         } else {
@@ -71,17 +74,24 @@ function setupEventListeners() {
         });
     });
 
-    // Search Monk Data
-    searchMonkEl.addEventListener('input', (e) => {
-        const term = e.target.value.toLowerCase();
-        const filtered = monksData.filter(m => 
-            (m.Temple && m.Temple.toLowerCase().includes(term)) ||
-            (m.Monk && m.Monk.toLowerCase().includes(term)) ||
-            (m.Group && m.Group.toLowerCase().includes(term)) ||
-            (m.Bedroom && m.Bedroom.toLowerCase().includes(term))
-        );
+    // Filter Monk Data
+    const applyFilters = () => {
+        const groupVal = filterGroupEl.value;
+        const bedroomVal = filterBedroomEl.value;
+        const amphurVal = filterAmphurEl.value;
+        
+        const filtered = monksData.filter(m => {
+            const matchGroup = !groupVal || m.Group === groupVal;
+            const matchBedroom = !bedroomVal || m.Bedroom === bedroomVal;
+            const matchAmphur = !amphurVal || m.Amphur === amphurVal;
+            return matchGroup && matchBedroom && matchAmphur;
+        });
         renderMonkList(filtered);
-    });
+    };
+
+    filterGroupEl.addEventListener('change', applyFilters);
+    filterBedroomEl.addEventListener('change', applyFilters);
+    filterAmphurEl.addEventListener('change', applyFilters);
 
     // Search Amphur
     searchAmphurEl.addEventListener('input', (e) => {
@@ -221,12 +231,8 @@ async function saveEdit() {
             // Re-render
             const activeTab = document.querySelector('.tab-btn.active').dataset.tab;
             if (activeTab === 'monk-data') {
-                const term = searchMonkEl.value.toLowerCase();
-                if(term) {
-                    searchMonkEl.dispatchEvent(new Event('input'));
-                } else {
-                    renderMonkList(monksData);
-                }
+                populateFilters(monksData);
+                filterGroupEl.dispatchEvent(new Event('change'));
             } else {
                 const term = searchAmphurEl.value.toLowerCase();
                 if(term) {
@@ -287,6 +293,31 @@ function showLoading(text) {
 
 function hideLoading() {
     loadingOverlay.classList.add('hidden');
+}
+
+function populateFilters(data) {
+    const groups = new Set();
+    const bedrooms = new Set();
+    const amphurs = new Set();
+    
+    data.forEach(m => {
+        if (m.Group) groups.add(m.Group);
+        if (m.Bedroom) bedrooms.add(m.Bedroom);
+        if (m.Amphur) amphurs.add(m.Amphur);
+    });
+    
+    const addOptions = (selectEl, values, defaultText) => {
+        const currentVal = selectEl.value;
+        selectEl.innerHTML = `<option value="">${defaultText}</option>`;
+        Array.from(values).sort().forEach(val => {
+            selectEl.innerHTML += `<option value="${val}">${val}</option>`;
+        });
+        selectEl.value = currentVal;
+    };
+    
+    addOptions(filterGroupEl, groups, 'กลุ่ม(ทั้งหมด)');
+    addOptions(filterBedroomEl, bedrooms, 'ที่พัก(ทั้งหมด)');
+    addOptions(filterAmphurEl, amphurs, 'อำเภอ(ทั้งหมด)');
 }
 
 // Start
