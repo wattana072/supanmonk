@@ -82,7 +82,7 @@ function setupEventListeners() {
         
         const filtered = monksData.filter(m => {
             const matchGroup = !groupVal || m.Group === groupVal;
-            const matchBedroom = !bedroomVal || m.Bedroom === bedroomVal;
+            const matchBedroom = !bedroomVal || (m.Bedroom && m.Bedroom.includes(bedroomVal));
             const matchAmphur = !amphurVal || m.Amphur === amphurVal;
             return matchGroup && matchBedroom && matchAmphur;
         });
@@ -297,12 +297,10 @@ function hideLoading() {
 
 function populateFilters(data) {
     const groups = new Set();
-    const bedrooms = new Set();
     const amphurs = new Set();
     
     data.forEach(m => {
         if (m.Group) groups.add(m.Group);
-        if (m.Bedroom) bedrooms.add(m.Bedroom);
         if (m.Amphur) amphurs.add(m.Amphur);
     });
     
@@ -316,8 +314,16 @@ function populateFilters(data) {
     };
     
     addOptions(filterGroupEl, groups, 'กลุ่ม(ทั้งหมด)');
-    addOptions(filterBedroomEl, bedrooms, 'ที่พัก(ทั้งหมด)');
     addOptions(filterAmphurEl, amphurs, 'อำเภอ(ทั้งหมด)');
+    
+    // Hardcode Bedroom options
+    const bedroomOptions = ['เถระ01', 'เถระ02', 'หยุด', 'Tent'];
+    const currentBedroomVal = filterBedroomEl.value;
+    filterBedroomEl.innerHTML = `<option value="">ที่พัก(ทั้งหมด)</option>`;
+    bedroomOptions.forEach(val => {
+        filterBedroomEl.innerHTML += `<option value="${val}">${val}</option>`;
+    });
+    filterBedroomEl.value = currentBedroomVal;
 }
 
 // Start
