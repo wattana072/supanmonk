@@ -332,7 +332,7 @@ function populateFilters(data) {
     addOptions(filterAmphurEl, amphurs, 'อำเภอ(ทั้งหมด)');
     
     // Hardcode Bedroom options
-    const bedroomOptions = ['เถระ01', 'เถระ02', 'หยุด', 'Tent'];
+    const bedroomOptions = ['หยุด', 'หอฉัน', 'รค.', '108ปี'];
     const currentBedroomVal = filterBedroomEl.value;
     filterBedroomEl.innerHTML = `<option value="">ที่พัก(ทั้งหมด)</option>`;
     bedroomOptions.forEach(val => {
